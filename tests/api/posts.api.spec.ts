@@ -1,13 +1,18 @@
 
 import { test, expect } from '@playwright/test';
+import { ApiClient } from '../../api/ApiClient';
 
 const baseURL = 'https://jsonplaceholder.typicode.com';
 
 test.describe('Posts REST API Tests', () => {
+  let apiClient: ApiClient;
 
-  test('GET - Retrieve a post successfully', async ({ request }) => {
+  test.beforeEach(async ({ request }) => {
+    apiClient = new ApiClient(request, baseURL);
+  });
 
-    const response = await request.get(`${baseURL}/posts/1`);
+  test('GET - Retrieve a post successfully', async () => {
+    const response = await apiClient.get('/posts/1');
 
     expect(response.status()).toBe(200);
     expect(response.ok()).toBeTruthy();
@@ -22,17 +27,14 @@ test.describe('Posts REST API Tests', () => {
     console.log('GET response:', responseBody);
   });
 
-  test('POST - Create a new post successfully', async ({ request }) => {
-
+  test('POST - Create a new post successfully', async () => {
     const payload = {
       title: 'Enterprise SDET Automation',
       body: 'API testing using Playwright and TypeScript',
       userId: 1
     };
 
-    const response = await request.post(`${baseURL}/posts`, {
-      data: payload
-    });
+    const response = await apiClient.post('/posts', payload);
 
     expect(response.status()).toBe(201);
 
@@ -46,44 +48,46 @@ test.describe('Posts REST API Tests', () => {
     console.log('POST response:', responseBody);
   });
 
-  test('PUT - Update an existing post', async ({ request }) => {
-    const response = await request.put(`${baseURL}/posts/1`, {
-      data: {
-        id: 1,
-        title: 'Updated Enterprise SDET Post',
-        body: 'Testing PUT requests with Playwright',
-        userId: 1,
-      },
-    });
+  test('PUT - Update an existing post', async () => {
+    const payload = {
+      id: 1,
+      title: 'Updated Enterprise SDET Post',
+      body: 'Testing PUT requests with Playwright',
+      userId: 1
+    };
+
+    const response = await apiClient.put('/posts/1', payload);
 
     expect(response.status()).toBe(200);
+
     const body = await response.json();
     expect(body.title).toBe('Updated Enterprise SDET Post');
   });
 
-  test('PATCH - Partially update a post', async ({ request }) => {
-    const response = await request.patch(`${baseURL}/posts/1`, {
-      data: { title: 'Updated Using PATCH' },
+  test('PATCH - Partially update a post', async () => {
+    const response = await apiClient.patch('/posts/1', {
+      title: 'Updated Using PATCH'
     });
 
     expect(response.status()).toBe(200);
+
     const body = await response.json();
     expect(body.title).toBe('Updated Using PATCH');
   });
 
-  test('DELETE - Delete an existing post', async ({ request }) => {
-    const response = await request.delete(`${baseURL}/posts/1`);
+  test('DELETE - Delete an existing post', async () => {
+    const response = await apiClient.delete('/posts/1');
 
     expect(response.status()).toBe(200);
   });
 
-  test('GET - Return 404 for nonexistent post', async ({ request }) => {
-    const response = await request.get(`${baseURL}/posts/999999`);
+  test('GET - Return 404 for nonexistent post', async () => {
+    const response = await apiClient.get('/posts/999999');
 
     expect(response.status()).toBe(404);
   });
-
 });
+
 
 
 
