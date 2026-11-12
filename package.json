@@ -1,0 +1,21 @@
+{
+  "name": "enterprise-sdet-automation-framework",
+  "version": "1.0.0",
+  "description": "Enterprise SDET framework demonstrating Playwright, Selenium Java, REST API automation, and CI/CD",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akbar-sha/enterprise-sdet-automation-framework.git"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/akbar-sha/enterprise-sdet-automation-framework/issues"
+  },
+  "homepage": "https://github.com/akbar-sha/enterprise-sdet-automation-framework#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.65.0",
+    "@types/node": "^26.6.6"
+  }
+}
