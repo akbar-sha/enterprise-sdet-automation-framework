@@ -46,4 +46,45 @@ test.describe('Posts REST API Tests', () => {
     console.log('POST response:', responseBody);
   });
 
+  test('PUT - Update an existing post', async ({ request }) => {
+    const response = await request.put(`${baseURL}/posts/1`, {
+      data: {
+        id: 1,
+        title: 'Updated Enterprise SDET Post',
+        body: 'Testing PUT requests with Playwright',
+        userId: 1,
+      },
+    });
+
+    expect(response.status()).toBe(200);
+    const body = await response.json();
+    expect(body.title).toBe('Updated Enterprise SDET Post');
+  });
+
+  test('PATCH - Partially update a post', async ({ request }) => {
+    const response = await request.patch(`${baseURL}/posts/1`, {
+      data: { title: 'Updated Using PATCH' },
+    });
+
+    expect(response.status()).toBe(200);
+    const body = await response.json();
+    expect(body.title).toBe('Updated Using PATCH');
+  });
+
+  test('DELETE - Delete an existing post', async ({ request }) => {
+    const response = await request.delete(`${baseURL}/posts/1`);
+
+    expect(response.status()).toBe(200);
+  });
+
+  test('GET - Return 404 for nonexistent post', async ({ request }) => {
+    const response = await request.get(`${baseURL}/posts/999999`);
+
+    expect(response.status()).toBe(404);
+  });
+
 });
+
+
+
+ 
